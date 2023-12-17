@@ -4,6 +4,7 @@ x-global-environment: &global-environment
   SERVICE_DISCOVERY_SERVER_URL: http://service-discovery:8761/eureka/
   SERVICE_DISCOVERY_HOST: service-discovery
   ZIPKIN_SERVER_URL: http://zipkin:9411/api/v2/spans
+  CONFIG_SERVER_URL: http://config-server:8888
 
 services: # Defines the services that make up your application run as container.
   zipkin:
@@ -24,6 +25,19 @@ services: # Defines the services that make up your application run as container.
     environment:
       <<: *global-environment
 
+  config-server:
+    container_name: config-server
+    image: eshop/config-server:latest
+    build:
+      context: ./config-server
+    ports:
+      - "8888:8888"
+    depends_on: # This service depends on following services
+      - zipkin
+      - service-discovery
+    environment:
+      <<: *global-environment
+
   apigateway:
     container_name: apigateway
     image: eshop/apigateway:latest
@@ -34,6 +48,7 @@ services: # Defines the services that make up your application run as container.
     depends_on:
       - zipkin
       - service-discovery
+      - config-server
     environment:
       <<: *global-environment
 
@@ -47,6 +62,7 @@ services: # Defines the services that make up your application run as container.
     depends_on:
       - zipkin
       - service-discovery
+      - config-server
       - apigateway
     environment:
       <<: *global-environment
