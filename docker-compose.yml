@@ -1,5 +1,10 @@
 version: '3.8' # Specifies the Docker Compose file version.
 
+x-global-environment: &global-environment
+  SERVICE_DISCOVERY_SERVER_URL: http://service-discovery:8761/eureka/
+  SERVICE_DISCOVERY_HOST: service-discovery
+  ZIPKIN_SERVER_URL: http://zipkin:9411/api/v2/spans
+
 services: # Defines the services that make up your application run as container.
   zipkin:
     image: openzipkin/zipkin
@@ -17,9 +22,7 @@ services: # Defines the services that make up your application run as container.
     depends_on:
       - zipkin
     environment:
-      - SERVICE_DISCOVERY_SERVER_URL=http://service-discovery:8761/eureka/
-      - SERVICE_DISCOVERY_HOST=service-discovery
-      - ZIPKIN_SERVER_URL=http://zipkin:9411/api/v2/spans
+      <<: *global-environment
 
   apigateway:
     container_name: apigateway
@@ -32,9 +35,7 @@ services: # Defines the services that make up your application run as container.
       - zipkin
       - service-discovery
     environment:
-      - SERVICE_DISCOVERY_SERVER_URL=http://service-discovery:8761/eureka/
-      - SERVICE_DISCOVERY_HOST=service-discovery
-      - ZIPKIN_SERVER_URL=http://zipkin:9411/api/v2/spans
+      <<: *global-environment
 
   product-api:
     container_name: product-api
@@ -48,6 +49,4 @@ services: # Defines the services that make up your application run as container.
       - service-discovery
       - apigateway
     environment:
-      - SERVICE_DISCOVERY_SERVER_URL=http://service-discovery:8761/eureka/
-      - SERVICE_DISCOVERY_HOST=service-discovery
-      - ZIPKIN_SERVER_URL=http://zipkin:9411/api/v2/spans
+      <<: *global-environment
