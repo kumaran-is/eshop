@@ -1,0 +1,53 @@
+version: '3.8' # Specifies the Docker Compose file version.
+
+services: # Defines the services that make up your application run as container.
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+  service-discovery: # Service Discovery container configuration.
+    container_name: service-discovery
+    image: eshop/service-discovery:latest
+    build: # Build the image for this service.
+      context: ./service-discovery # Context directory for the build.
+    ports:
+      - "8761:8761"  # Map port 8761 on the host to port 8761 in the container.
+    depends_on:
+      - zipkin
+    environment:
+      - SERVICE_DISCOVERY_SERVER_URL=http://service-discovery:8761/eureka/
+      - SERVICE_DISCOVERY_HOST=service-discovery
+      - ZIPKIN_SERVER_URL=http://zipkin:9411/api/v2/spans
+
+  apigateway:
+    container_name: apigateway
+    image: eshop/apigateway:latest
+    build:
+      context: ./apigateway
+    ports:
+      - "9000:9000"
+    depends_on:
+      - zipkin
+      - service-discovery
+    environment:
+      - SERVICE_DISCOVERY_SERVER_URL=http://service-discovery:8761/eureka/
+      - SERVICE_DISCOVERY_HOST=service-discovery
+      - ZIPKIN_SERVER_URL=http://zipkin:9411/api/v2/spans
+
+  product-api:
+    container_name: product-api
+    image: eshop/product-api:latest
+    build:
+      context: ./product-api
+    ports:
+      - "9002:9002"
+    depends_on:
+      - zipkin
+      - service-discovery
+      - apigateway
+    environment:
+      - SERVICE_DISCOVERY_SERVER_URL=http://service-discovery:8761/eureka/
+      - SERVICE_DISCOVERY_HOST=service-discovery
+      - ZIPKIN_SERVER_URL=http://zipkin:9411/api/v2/spans

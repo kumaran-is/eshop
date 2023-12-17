@@ -1,0 +1,65 @@
+# OS-specific files
+.reload*
+.DS_Store
+Thumbs.db
+HELP.md
+
+### VS Code ###
+.vscode/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+.ideaModule.xml
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+
+# Ignore editor temporary files
+*.swp
+*~.swp
+
+# Ignore build system outputs
+**/build
+
+# Ignore Maven artifacts
+.mvn/
+
+# Logs
+*.log
+**/logs/*
+
+# Ignore generated documentation
+apigateway/docs
+product-api/docs
+service-discovery/docs
+
+# Maven
+target/
+**/target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+build/
+**/build/
+
+# Maven Wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+
