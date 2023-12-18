@@ -49,9 +49,6 @@ target/
 build/
 **/build/
 
-# Maven Wrapper
-.mvn/wrapper/maven-wrapper.jar
-
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
