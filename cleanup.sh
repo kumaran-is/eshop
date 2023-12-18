@@ -18,7 +18,7 @@
 #done
 
 # List your image names here
-declare -a image_names=("eshop/product-api:latest" "eshop/apigateway:latest" "eshop/service-discovery:latest")
+declare -a image_names=("eshop/product-api:latest" "eshop/apigateway:latest" "eshop/config-server:latest" "eshop/service-discovery:latest")
 
 for image in "${image_names[@]}"
 do
